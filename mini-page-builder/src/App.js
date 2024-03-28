@@ -1,16 +1,16 @@
-// App.js
 import React from 'react';
-import { ChakraProvider } from '@chakra-ui/react';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import PageBuilder from './components/PageBuilder';
+import { ChakraProvider, Flex } from '@chakra-ui/react';
+import Sidebar from './components/Sidebar';
+import Page from './components/Page';
+
 
 function App() {
   return (
     <ChakraProvider>
-      <DndProvider backend={HTML5Backend}>
-        <PageBuilder />
-      </DndProvider>
+      <Flex>
+        <Sidebar />
+        <Page />
+      </Flex>
     </ChakraProvider>
   );
 }

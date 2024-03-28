@@ -1,46 +1,36 @@
-// components/Sidebar.js
 import React from 'react';
-import { Box } from '@chakra-ui/react';
-import { useDrag } from 'react-dnd';
+import { Box, Text, Button } from '@chakra-ui/react';
 
-const ElementTypes = {
-  LABEL: 'LABEL',
-  INPUT: 'INPUT',
-  BUTTON: 'BUTTON',
-};
-
-function Sidebar({ onConfigChange }) {
-  const [{ isDragging }, drag] = useDrag({
-    type: ElementTypes.LABEL,
-    item: { type: ElementTypes.LABEL },
-    end: (item, monitor) => {
-      if (monitor.didDrop()) {
-        const dropResult = monitor.getDropResult();
-        console.log(`Element dropped into ${dropResult.name}`);
-      }
-    },
-    collect: (monitor) => ({
-      isDragging: monitor.isDragging(),
-    }),
-  });
+const DraggableItem = ({ type }) => {
+  const handleDragStart = (e) => {
+    e.dataTransfer.setData('text/plain', type);
+  };
 
   return (
     <Box
-      width="200px"
-      height="100vh"
-      borderRight="1px solid #ccc"
-      padding="10px"
+      draggable
+      onDragStart={handleDragStart}
+      p={2}
+      m={2}
+      bg="gray.200"
+      cursor="pointer"
     >
-      <Box
-        ref={drag}
-        marginBottom="10px"
-        opacity={isDragging ? 0.5 : 1}
-        cursor="move"
-      >
-        Label
-      </Box>
+      {type === 'Label' && <Text>Label</Text>}
+      {type === 'Input' && <Text>Input</Text>}
+      {type === 'Button' && <Text>Button</Text>}
     </Box>
   );
-}
+};
+
+const Sidebar = () => {
+  return (
+    <Box w="200px" h="100vh" bg="gray.100" p={4}>
+      <Text fontSize="lg" mb={4}>BLOCK</Text>
+      <DraggableItem type="Label" />
+      <DraggableItem type="Input" />
+      <DraggableItem type="Button" />
+    </Box>
+  );
+};
 
 export default Sidebar;
