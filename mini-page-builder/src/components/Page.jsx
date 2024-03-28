@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Input, Button, Text } from '@chakra-ui/react';
+import { Box, Button } from '@chakra-ui/react';
+import LabelModal from './LabelModal';
+import InputModal from './InputModal';
+import ButtonModal from './ButtonModal';
 
-const BlankPage = () => {
+const Page = () => {
   const [components, setComponents] = useState([]);
+  const [modalData, setModalData] = useState({});
 
   useEffect(() => {
     const savedComponents = JSON.parse(localStorage.getItem('pageComponents')) || [];
@@ -16,9 +20,21 @@ const BlankPage = () => {
   const handleDrop = (e) => {
     e.preventDefault();
     const type = e.dataTransfer.getData('text/plain');
-    const newComponent = { type, id: new Date().getTime(), x: 0, y: 0 };
-    setComponents([...components, newComponent]);
-    localStorage.setItem('pageComponents', JSON.stringify([...components, newComponent]));
+    const x = e.clientX - e.target.getBoundingClientRect().left;
+    const y = e.clientY - e.target.getBoundingClientRect().top;
+
+    if (type === 'Label') {
+      openModal('Label', { x, y }); 
+     } else {
+      const newComponent = {
+        type,
+        id: new Date().getTime(),
+        x,
+        y,
+      };
+      setComponents([...components, newComponent]);
+      localStorage.setItem('pageComponents', JSON.stringify([...components, newComponent]));
+    }
   };
 
   const handleDelete = (id) => {
@@ -31,28 +47,64 @@ const BlankPage = () => {
     console.log('Edit component:', id);
   };
 
+  const handleCloseModal = () => {
+    setModalData({});
+  };
+
+  const handleLabelSubmit = (labelData) => {
+    setComponents([...components, { ...labelData, id: new Date().getTime() }]);
+    localStorage.setItem('pageComponents', JSON.stringify([...components, { ...labelData, id: new Date().getTime() }]));
+    handleCloseModal();
+  };
+
+  const handleInputSubmit = (inputData) => {
+    handleCloseModal();
+  };
+
+  const handleButtonSubmit = (buttonData) => {
+    handleCloseModal();
+  };
+
+  const openModal = (type, initialData) => {
+    setModalData({ type, initialData }); 
+};
+
   return (
     <Box flex="1" p={4} onDragOver={handleDragOver} onDrop={handleDrop} bg="white">
       <Box h="100%" border="2px dashed gray" position="relative">
-        {components.map((component) => (
-          <Box
-            key={component.id}
-            p={2}
-            m={2}
-            bg="gray.200"
-            cursor="pointer"
-            position="absolute"
-            left={`${component.x}px`}
-            top={`${component.y}px`}
-            onClick={() => handleEdit(component.id)}
-          >
-            {component.type}
-            <Button onClick={() => handleDelete(component.id)}>Delete</Button>
-          </Box>
-        ))}
+        {components.map((component) => {
+          let style = {}; 
+          if (component.type === 'Label') {
+            style = {
+              position: 'absolute',
+              left: `${component.x}px`,
+              top: `${component.y}px`,
+              fontSize: `${component.fontSize}px`,
+              fontWeight: component.fontWeight,
+            };
+          }
+
+          return (
+            <Box
+              key={component.id}
+              p={2}
+              m={2}
+              bg="gray.200"
+              cursor="pointer"
+              style={style} 
+              onClick={() => handleEdit(component.id)}
+            >
+              {component.type}
+              <Button onClick={() => handleDelete(component.id)}>Delete</Button>
+            </Box>
+          );
+        })}
       </Box>
+      <LabelModal isOpen={modalData.type === 'Label'} onClose={handleCloseModal} onSubmit={handleLabelSubmit} initialData={modalData.initialData} />
+      <InputModal isOpen={modalData.type === 'Input'} onClose={handleCloseModal} onSubmit={handleInputSubmit} />
+      <ButtonModal isOpen={modalData.type === 'Button'} onClose={handleCloseModal} onSubmit={handleButtonSubmit} />
     </Box>
   );
 };
 
-export default BlankPage;
+export default Page;
