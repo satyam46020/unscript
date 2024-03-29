@@ -3,7 +3,7 @@
 ## Description
 Mini Page Builder is a web application that allows users to build custom pages by dragging and dropping components from a sidebar onto a blank canvas. Users can configure each component and arrange them on the canvas to design their desired layout.
 
-[Click here to visit site]()
+[Click here to visit site](https://mini-page-builder-tau.vercel.app/)
 
 ## Installation
 1. Clone the repository.
@@ -14,29 +14,17 @@ Mini Page Builder is a web application that allows users to build custom pages b
 
 ## Screenshots
 
-#### Home
-<img src="./src/Images/Home.png" alt="Home" width="300" 
-style="box-shadow: 0px 6px 30px rgba(0, 0, 0, 0.8);">
+![Home](./src/Images/Home.png)
 
-#### Label Modal
-<img src="./src/Images/Label_Modal.png" alt="Label Modal" width="300" 
-style="box-shadow: 0px 6px 30px rgba(0, 0, 0, 0.8);">
+![Label Modal](./src/Images/Label_Modal.png)
 
-#### Input Modal
-<img src="./src/Images/Input_Modal.png" alt="Input Modal" width="300" 
-style="box-shadow: 0px 6px 30px rgba(0, 0, 0, 0.8);">
+![Input Modal](./src/Images/Input_Modal.png)
 
-#### Button Modal
-<img src="./src/Images/Button_Modal.png" alt="Button Modal" width="300" 
-style="box-shadow: 0px 6px 30px rgba(0, 0, 0, 0.8);">
+![Button Modal](./src/Images/Button_Modal.png)
 
-#### Element
-<img src="./src/Images/Element.png" alt="Element" width="300" 
-style="box-shadow: 0px 6px 30px rgba(0, 0, 0, 0.8);">
+![Element](./src/Images/Element.png)
 
-#### Selected Element
-<img src="./src/Images/Selected_Element.png" alt="Selected Element" width="300" 
-style="box-shadow: 0px 6px 30px rgba(0, 0, 0, 0.8);">
+![Selected Element](./src/Images/Selected_Element.png)
 
 ## Features
 - Drag and drop components (Label, Input, Button) from the sidebar onto the canvas.
