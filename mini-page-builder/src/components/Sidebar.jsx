@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Text, useColorMode } from '@chakra-ui/react';
+import { Box, Button, Text, useColorMode } from '@chakra-ui/react';
 import { HiOutlineTag, HiOutlineViewList, HiOutlineCursorClick } from 'react-icons/hi';
 
 const DraggableItem = ({ type }) => {
@@ -49,14 +49,35 @@ const DraggableItem = ({ type }) => {
 };
 
 const Sidebar = () => {
-  return (
-    <Box w="200px" h="100vh" bg="black" p={4} boxShadow="md">
-      <Text fontSize="xl" fontWeight="bold" mb={4} ml={5} color="white">Blocks</Text>
-      <DraggableItem type="Label" />
-      <DraggableItem type="Input" />
-      <DraggableItem type="Button" />
-    </Box>
-  );
-};
+    const handleExport = () => {
+      const pageComponents = JSON.parse(localStorage.getItem('pageComponents'));
+      if (pageComponents) {
+        const data = JSON.stringify(pageComponents);
+        const blob = new Blob([data], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'page_components.json';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      } else {
+        console.error('No page components found in localStorage.');
+      }
+    };
+  
+    return (
+      <Box w="200px" h="100vh" bg="black" p={4} boxShadow="md">
+        <Text fontSize="xl" fontWeight="bold" mb={4} ml={5} color="white">Blocks</Text>
+        <Box mb={4}>
+          <DraggableItem type="Label" />
+          <DraggableItem type="Input" />
+          <DraggableItem type="Button" />
+        </Box>
+        <Button onClick={handleExport} variant="outline" colorScheme="blue" size="sm" ml={5}>Export to JSON</Button>
+      </Box>
+    );
+  };
 
 export default Sidebar;
