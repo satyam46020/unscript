@@ -14,17 +14,17 @@ Mini Page Builder is a web application that allows users to build custom pages b
 
 ## Screenshots
 
-![Home](./src/Images/Home.png)
+![Home](./mini-page-builder/src/Images/Home.png)
 
-![Label Modal](./src/Images/Label_Modal.png)
+![Label Modal](./mini-page-builder/src/Images/Label_Modal.png)
 
-![Input Modal](./src/Images/Input_Modal.png)
+![Input Modal](./mini-page-builder/src/Images/Input_Modal.png)
 
-![Button Modal](./src/Images/Button_Modal.png)
+![Button Modal](./mini-page-builder/src/Images/Button_Modal.png)
 
-![Element](./src/Images/Element.png)
+![Element](./mini-page-builder/src/Images/Element.png)
 
-![Selected Element](./src/Images/Selected_Element.png)
+![Selected Element](./mini-page-builder/src/Images/Selected_Element.png)
 
 ## Features
 - Drag and drop components (Label, Input, Button) from the sidebar onto the canvas.
