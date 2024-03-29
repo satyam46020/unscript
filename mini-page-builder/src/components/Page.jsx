@@ -40,7 +40,6 @@ const Page = () => {
     const updatedComponents = components.filter((component) => component.id !== id);
     setComponents(updatedComponents);
     
-    // Remove the element from local storage
     localStorage.setItem('pageComponents', JSON.stringify(updatedComponents));
 };
 
@@ -75,7 +74,7 @@ const Page = () => {
         if (component.id === id) {
             return {
                 ...component,
-                selected: !component.selected, // Toggle the selected property
+                selected: !component.selected, 
             };
         }
         return component;
@@ -102,6 +101,22 @@ const Page = () => {
   const handleKeyDown = (e, id) => {
     if (e.key === 'Delete') {
       handleDelete(id);
+    } else if (e.key === 'Enter') {
+      if (modalData.type) {
+        const selectedComponent = components.find(component => component.id === id);
+        if (selectedComponent) {
+          const modalType = selectedComponent.type === 'Label'
+            ? 'Label'
+            : selectedComponent.type === 'Input'
+              ? 'Input'
+              : selectedComponent.type === 'Button'
+                ? 'Button'
+                : null;
+          if (modalType) {
+            setModalData({ type: modalType, initialData: selectedComponent });
+          }
+        }
+      }
     }
   };
 
@@ -118,7 +133,7 @@ const Page = () => {
                         fontSize: `${component.fontSize}px`,
                         fontWeight: component.fontWeight,
                         cursor: component.draggable ? 'move' : 'pointer',
-                        border: component.selected ? '2px solid red' : '2px solid transparent', // Apply red border if selected
+                        border: component.selected ? '2px solid red' : '2px solid transparent', 
                     };
                 }
                 return (
@@ -132,9 +147,9 @@ const Page = () => {
                         draggable={component.draggable}
                         onDragStart={(e) => handleDragStart(e, component.id)}
                         onDragEnd={(e) => handleDragEnd(e, component.id)}
-                        onKeyDown={(e) => handleKeyDown(e, component.id)} // Add keydown event listener
+                        onKeyDown={(e) => handleKeyDown(e, component.id)} 
                         onClick={() => handleClick(component.id)}
-                        tabIndex={0} // Make it focusable
+                        tabIndex={0} 
                     >
                         {component.type === 'Label' && <label>{component.text}</label>}
                         {component.type === 'Input' && <input placeholder={component.inputType} type={component.inputType} style={{ fontSize: '16px' }} />}
