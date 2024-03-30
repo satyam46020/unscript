@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Input, Button, FormControl, FormLabel } from '@chakra-ui/react';
+import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Input, Button, FormControl, FormLabel, Text } from '@chakra-ui/react';
 
 const LabelModal = ({ isOpen, onClose, onSubmit, initialData }) => {
   const [labelText, setLabelText] = useState('');
@@ -7,6 +7,7 @@ const LabelModal = ({ isOpen, onClose, onSubmit, initialData }) => {
   const [yPosition, setYPosition] = useState('');
   const [fontSize, setFontSize] = useState('');
   const [fontWeight, setFontWeight] = useState('');
+  const [missingFields, setMissingFields] = useState([]);
 
   useEffect(() => {
     if (initialData) {
@@ -19,8 +20,9 @@ const LabelModal = ({ isOpen, onClose, onSubmit, initialData }) => {
   }, [initialData]);
 
   const handleSubmit = () => {
-    if (!labelText || !xPosition || !yPosition || !fontSize || !fontWeight) {
-      alert('Please fill in all fields.');
+    const requiredFields = [labelText, xPosition, yPosition, fontSize, fontWeight];
+    if (requiredFields.some(field => !field)) {
+      setMissingFields(requiredFields.map((field, index) => field ? '' : index));
       return;
     }
     
@@ -52,26 +54,29 @@ const LabelModal = ({ isOpen, onClose, onSubmit, initialData }) => {
         <ModalHeader>Add Label</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <FormControl mb={3}>
+          <FormControl mb={3} isInvalid={missingFields.includes(0)}>
             <FormLabel>Text</FormLabel>
             <Input value={labelText} onChange={(e) => setLabelText(e.target.value)} />
           </FormControl>
-          <FormControl mb={3}>
+          <FormControl mb={3} isInvalid={missingFields.includes(1)}>
             <FormLabel>X</FormLabel>
             <Input type="number" value={xPosition} onChange={(e) => setXPosition(e.target.value)} />
           </FormControl>
-          <FormControl mb={3}>
+          <FormControl mb={3} isInvalid={missingFields.includes(2)}>
             <FormLabel>Y</FormLabel>
             <Input type="number" value={yPosition} onChange={(e) => setYPosition(e.target.value)} />
           </FormControl>
-          <FormControl mb={3}>
+          <FormControl mb={3} isInvalid={missingFields.includes(3)}>
             <FormLabel>Font Size</FormLabel>
             <Input type="number" value={fontSize} onChange={(e) => setFontSize(e.target.value)} />
           </FormControl>
-          <FormControl mb={3}>
+          <FormControl mb={3} isInvalid={missingFields.includes(4)}>
             <FormLabel>Font Weight</FormLabel>
             <Input type="text" value={fontWeight} onChange={(e) => setFontWeight(e.target.value)} />
           </FormControl>
+          {missingFields.length > 0 && (
+            <Text color="red.500">Please fill in all fields.</Text>
+          )}
         </ModalBody>
         <ModalFooter>
           <Button colorScheme="blue" mr={3} onClick={handleSubmit}>Save Changes</Button>
