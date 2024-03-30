@@ -1,12 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Input, Button, FormControl, FormLabel } from '@chakra-ui/react';
 
 const ButtonModal = ({ isOpen, onClose, onSubmit, initialData }) => {
-  const [buttonName, setButtonName] = useState(initialData?.buttonName || '');
-  const [x, setX] = useState(initialData?.x || '');
-  const [y, setY] = useState(initialData?.y || '');
+  const [buttonName, setButtonName] = useState('');
+  const [x, setX] = useState('');
+  const [y, setY] = useState('');
+
+  useEffect(() => {
+    if (initialData) {
+      setButtonName(initialData.buttonName || '');
+      setX(initialData.x || '');
+      setY(initialData.y || '');
+    }
+  }, [initialData]);
 
   const handleSubmit = () => {
+    if (!buttonName || !x || !y) {
+      alert('Please fill in all fields.');
+      return;
+    }
+
     const buttonData = {
       type: 'Button',
       buttonName,
@@ -17,8 +30,15 @@ const ButtonModal = ({ isOpen, onClose, onSubmit, initialData }) => {
     onClose();
   };
 
+  const handleClose = () => {
+    setButtonName('');
+    setX('');
+    setY('');
+    onClose();
+  };
+
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={handleClose}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Add Button</ModalHeader>
@@ -39,7 +59,7 @@ const ButtonModal = ({ isOpen, onClose, onSubmit, initialData }) => {
         </ModalBody>
         <ModalFooter>
           <Button colorScheme="blue" mr={3} onClick={handleSubmit}>Save Changes</Button>
-          <Button onClick={onClose}>Cancel</Button>
+          <Button onClick={handleClose}>Cancel</Button>
         </ModalFooter>
       </ModalContent>
     </Modal>

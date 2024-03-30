@@ -1,14 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Input, Button, FormControl, FormLabel } from '@chakra-ui/react';
 
-const LabelModal = ({ isOpen, onClose, onSubmit }) => {
+const LabelModal = ({ isOpen, onClose, onSubmit, initialData }) => {
   const [labelText, setLabelText] = useState('');
   const [xPosition, setXPosition] = useState('');
   const [yPosition, setYPosition] = useState('');
   const [fontSize, setFontSize] = useState('');
   const [fontWeight, setFontWeight] = useState('');
 
+  useEffect(() => {
+    if (initialData) {
+      setLabelText(initialData.text || '');
+      setXPosition(initialData.x || '');
+      setYPosition(initialData.y || '');
+      setFontSize(initialData.fontSize || '');
+      setFontWeight(initialData.fontWeight || '');
+    }
+  }, [initialData]);
+
   const handleSubmit = () => {
+    if (!labelText || !xPosition || !yPosition || !fontSize || !fontWeight) {
+      alert('Please fill in all fields.');
+      return;
+    }
+    
     const labelData = {
       type: 'Label',
       text: labelText,
@@ -21,8 +36,17 @@ const LabelModal = ({ isOpen, onClose, onSubmit }) => {
     onClose();
   };
 
+  const handleClose = () => {
+    setLabelText('');
+    setXPosition('');
+    setYPosition('');
+    setFontSize('');
+    setFontWeight('');
+    onClose();
+  };
+
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={handleClose}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Add Label</ModalHeader>
@@ -51,7 +75,7 @@ const LabelModal = ({ isOpen, onClose, onSubmit }) => {
         </ModalBody>
         <ModalFooter>
           <Button colorScheme="blue" mr={3} onClick={handleSubmit}>Save Changes</Button>
-          <Button onClick={onClose}>Cancel</Button>
+          <Button onClick={handleClose}>Cancel</Button>
         </ModalFooter>
       </ModalContent>
     </Modal>

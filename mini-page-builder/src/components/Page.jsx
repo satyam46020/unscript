@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Button } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import LabelModal from './LabelModal';
 import InputModal from './InputModal';
 import ButtonModal from './ButtonModal';
@@ -8,6 +8,7 @@ const Page = () => {
   const [components, setComponents] = useState([]);
   const [modalData, setModalData] = useState({});
   const [dragOffset, setDragOffset] = useState({ offsetX: 0, offsetY: 0 });
+  const [isModalOpen, setIsModalOpen] = useState(false); 
 
   useEffect(() => {
     const savedComponents = JSON.parse(localStorage.getItem('pageComponents')) || [];
@@ -42,7 +43,8 @@ const Page = () => {
   };
 
   const handleCloseModal = () => {
-    setModalData({});
+    setIsModalOpen(false); 
+    setModalData({}); 
   };
 
   const handleLabelSubmit = (labelData) => {
@@ -65,6 +67,7 @@ const Page = () => {
 
   const openModal = (type, initialData) => {
     setModalData({ type, initialData });
+    setIsModalOpen(true); 
   };
 
   const handleClick = (id) => {
@@ -96,12 +99,12 @@ const Page = () => {
     localStorage.setItem('pageComponents', JSON.stringify(updatedComponents));
   };
 
-  const handleKeyDown = (e, id) => {
+  const handleKeyDown = (e, data) => {
     if (e.key === 'Delete') {
-      handleDelete(id);
+      handleDelete(data.id);
     } else if (e.key === 'Enter') {
-      if (modalData.type) {
-        const selectedComponent = components.find(component => component.id === id);
+      if (data.type) {
+        const selectedComponent = components.find(component => component.id === data.id);
         if (selectedComponent) {
           const modalType = selectedComponent.type === 'Label'
             ? 'Label'
@@ -112,6 +115,7 @@ const Page = () => {
                 : null;
           if (modalType) {
             setModalData({ type: modalType, initialData: selectedComponent });
+            setIsModalOpen(true); 
           }
         }
       }
@@ -145,7 +149,7 @@ const Page = () => {
               draggable={component.draggable}
               onDragStart={(e) => handleDragStart(e, component.id)}
               onDragEnd={(e) => handleDragEnd(e, component.id)}
-              onKeyDown={(e) => handleKeyDown(e, component.id)} 
+              onKeyDown={(e) => handleKeyDown(e, component)} 
               onClick={() => handleClick(component.id)}
               tabIndex={0} 
             >
@@ -156,9 +160,9 @@ const Page = () => {
           );
         })}
       </Box>
-      <LabelModal isOpen={modalData.type === 'Label'} onClose={handleCloseModal} onSubmit={handleLabelSubmit} initialData={modalData.initialData} />
-      <InputModal isOpen={modalData.type === 'Input'} onClose={handleCloseModal} onSubmit={handleInputSubmit} initialData={modalData.initialData} />
-      <ButtonModal isOpen={modalData.type === 'Button'} onClose={handleCloseModal} onSubmit={handleButtonSubmit} initialData={modalData.initialData} />
+      <LabelModal isOpen={isModalOpen && modalData.type === 'Label'} onClose={handleCloseModal} onSubmit={handleLabelSubmit} initialData={modalData.initialData} />
+      <InputModal isOpen={isModalOpen && modalData.type === 'Input'} onClose={handleCloseModal} onSubmit={handleInputSubmit} initialData={modalData.initialData} />
+      <ButtonModal isOpen={isModalOpen && modalData.type === 'Button'} onClose={handleCloseModal} onSubmit={handleButtonSubmit} initialData={modalData.initialData} />
     </Box>
   );
 };
