@@ -5,6 +5,8 @@ Mini Page Builder is a web application that allows users to build custom pages b
 
 [Click here to visit site](https://mini-page-builder-tau.vercel.app/)
 
+[Demo Video](https://drive.google.com/file/d/1EUf2CoYCFYWXFd9qhKwdAXQSF1XF1I4w/view?usp=drive_link)
+
 ## Installation
 1. Clone the repository.
 2. Navigate to the project directory.
