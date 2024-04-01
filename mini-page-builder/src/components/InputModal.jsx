@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Input, Button, FormControl, FormLabel, Text } from '@chakra-ui/react';
+import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Input, Button, FormControl, FormLabel, Text, Select } from '@chakra-ui/react';
 
 const InputModal = ({ isOpen, onClose, onSubmit, initialData }) => {
   const [inputType, setInputType] = useState('');
   const [x, setX] = useState('');
   const [y, setY] = useState('');
+  const [fontSize, setFontSize] = useState('');
+  const [fontWeight, setFontWeight] = useState('');
   const [missingFields, setMissingFields] = useState([]);
 
   useEffect(() => {
@@ -12,11 +14,13 @@ const InputModal = ({ isOpen, onClose, onSubmit, initialData }) => {
       setInputType(initialData.inputType || '');
       setX(initialData.x || '');
       setY(initialData.y || '');
+      setFontSize(initialData.fontSize || '');
+      setFontWeight(initialData.fontWeight || '');
     }
   }, [initialData]);
 
   const handleSubmit = () => {
-    const requiredFields = [inputType, x, y];
+    const requiredFields = [inputType, x, y, fontSize, fontWeight];
     if (requiredFields.some(field => !field)) {
       setMissingFields(requiredFields.map((field, index) => field ? '' : index));
       return;
@@ -27,6 +31,8 @@ const InputModal = ({ isOpen, onClose, onSubmit, initialData }) => {
       inputType,
       x: parseInt(x),
       y: parseInt(y),
+      fontSize: parseInt(fontSize),
+      fontWeight: fontWeight
     };
     onSubmit(inputData);
     onClose();
@@ -36,6 +42,8 @@ const InputModal = ({ isOpen, onClose, onSubmit, initialData }) => {
     setInputType('');
     setX('');
     setY('');
+    setFontSize('');
+    setFontWeight('');
     onClose();
   };
 
@@ -57,6 +65,14 @@ const InputModal = ({ isOpen, onClose, onSubmit, initialData }) => {
           <FormControl mb={3} isInvalid={missingFields.includes(2)}>
             <FormLabel>Y</FormLabel>
             <Input type="number" value={y} onChange={(e) => setY(e.target.value)} />
+          </FormControl>
+          <FormControl mb={3} isInvalid={missingFields.includes(3)}>
+            <FormLabel>Font Size</FormLabel>
+            <Input type="number" value={fontSize} onChange={(e) => setFontSize(e.target.value)} />
+          </FormControl>
+          <FormControl mb={3} isInvalid={missingFields.includes(4)}>
+            <FormLabel>Font Weight</FormLabel>
+            <Input type="text" value={fontWeight} onChange={(e) => setFontWeight(e.target.value)} />
           </FormControl>
           {missingFields.length > 0 && (
             <Text color="red.500">Please fill in all fields.</Text>
