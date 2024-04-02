@@ -154,8 +154,8 @@ const Page = () => {
               tabIndex={0} 
             >
               {component.type === 'Label' && <label>{component.text}</label>}
-              {component.type === 'Input' && <input placeholder={component.inputType} type={component.inputType} style={{ fontSize: '16px' }} />}
-              {component.type === 'Button' && <button style={{ fontSize: '16px' }}>{component.buttonName}</button>}
+              {component.type === 'Input' && <input placeholder={component.inputType} type={component.inputType} />}
+              {component.type === 'Button' && <button >{component.buttonName}</button>}
             </Box>
           );
         })}
